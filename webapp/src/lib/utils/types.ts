@@ -55,6 +55,7 @@ export type Article = {
   authorId: string | null;
   category: Category | null;
   categoryId: string | null;
+  coverImage: string | null;
   createdAt: Date;
   updatedAt: Date;
 };
