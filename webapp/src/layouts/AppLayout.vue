@@ -1,6 +1,9 @@
 <template>
   <div class="min-h-screen bg-background">
-    <header v-if="isAuthenticated" class="border-b p-4 flex items-center justify-between">
+    <header
+      v-if="isAuthenticated"
+      class="border-b p-4 flex items-center justify-between"
+    >
       <span class="text-foreground">Bienvenue, {{ user?.firstName }}</span>
       <Button variant="outline" @click="disconnect">Déconnexion</Button>
     </header>
