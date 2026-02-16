@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 import LoginView from "./views/auth/LoginView.vue";
 import RegisterView from "./views/auth/RegisterView.vue";
+import LandingView from "./views/LandingView.vue";
 
 import { useAuthStore } from "./stores/authStore";
 import apiClient from "./lib/utils/apiClient";
@@ -24,16 +25,16 @@ async function authGuard(to: any, from: any, next: any) {
 }
 
 const routes = [
-  { path: "/", redirect: "/app", name: "home-redirect" },
-  { path: "/app", component: Main, name: "landing-main" },
+  { path: "/", component: LandingView, name: "landing" },
+  { path: "/dashboard", component: Main, name: "dashboard" },
   { path: "/login", component: LoginView, name: "app-login" },
   { path: "/register", component: RegisterView, name: "app-register" },
 ];
 
 const getGuardedRoutes = () => {
-  const guardedMatches = ["app"];
+  const guardedPaths = ["/dashboard"];
   return routes.map((route) => {
-    if (guardedMatches.some((match) => route.path.includes(match))) {
+    if (guardedPaths.includes(route.path)) {
       return {
         ...route,
         beforeEnter: authGuard,
