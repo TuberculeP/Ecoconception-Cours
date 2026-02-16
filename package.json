@@ -13,6 +13,7 @@
     "dockerize": "docker compose -f docker-compose.yml -f docker-compose.local.yml up --build --force-recreate -d"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.990.0",
     "@elemaudio/core": "^4.0.1",
     "@elemaudio/web-renderer": "^4.0.3",
     "@types/multer": "^2.0.0",
@@ -33,6 +34,7 @@
     "lodash": "^4.17.21",
     "lucide-vue-next": "^0.560.0",
     "multer": "^2.0.2",
+    "multer-s3": "^3.0.1",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
@@ -62,6 +64,7 @@
     "@types/express": "^5.0.0",
     "@types/express-session": "^1.18.2",
     "@types/lodash": "^4.17.20",
+    "@types/multer-s3": "^3.0.3",
     "@types/node": "^20",
     "@types/passport": "^1.0.17",
     "@types/passport-google-oauth20": "^2.0.17",

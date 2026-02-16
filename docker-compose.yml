@@ -25,6 +25,39 @@ services:
       timeout: 5s
       retries: 5
 
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-minioadmin}
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio:
+        condition: service_healthy
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set myminio http://minio:9000 $${MINIO_ROOT_USER:-minioadmin} $${MINIO_ROOT_PASSWORD:-minioadmin};
+      mc mb --ignore-existing myminio/uploads;
+      mc anonymous set download myminio/uploads;
+      exit 0;
+      "
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-minioadmin}
 
   app:
     build:
@@ -33,15 +66,20 @@ services:
     container_name: express-vue-app
     environment:
       POSTGRES_URL: postgres://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-mydatabase}
+      S3_BUCKET: uploads
+      S3_REGION: us-east-1
+      S3_ACCESS_KEY_ID: ${MINIO_USER:-minioadmin}
+      S3_SECRET_ACCESS_KEY: ${MINIO_PASSWORD:-minioadmin}
+      S3_ENDPOINT: http://minio:9000
     depends_on:
       postgres:
         condition: service_healthy
       cache:
         condition: service_healthy
-    volumes:
-      - public_app_data:/app/public
+      minio:
+        condition: service_healthy
 
 volumes:
   postgres_data:
   redis_data:
-  public_app_data:
+  minio_data:

@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import "dotenv/config";
 import pg from "./config/db.config";
 import path from "path";

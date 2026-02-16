@@ -140,12 +140,21 @@ router.post("/categories", async (req, res): Promise<void> => {
   res.status(201).json({ data: category });
 });
 
+// Helper pour valider un UUID
+const isUUID = (str: string): boolean =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+
 // GET /api/articles/:idOrSlug - Détail d'un article
 router.get("/:idOrSlug", async (req, res): Promise<void> => {
   const { idOrSlug } = req.params;
 
+  // Construire la condition de recherche selon le format du paramètre
+  const whereCondition = isUUID(idOrSlug)
+    ? [{ id: idOrSlug }, { slug: idOrSlug }]
+    : [{ slug: idOrSlug }];
+
   const article = await articleRepo().findOne({
-    where: [{ id: idOrSlug }, { slug: idOrSlug }],
+    where: whereCondition,
     relations: ["author", "category"],
   });
 
