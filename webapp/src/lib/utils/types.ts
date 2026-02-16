@@ -26,3 +26,57 @@ export type User = {
   receivedMessages: Record<string, any>[];
   createdAt: Date;
 };
+
+export type ArticleStatus = "draft" | "published";
+
+export type Category = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  color: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type Article = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  tags: string[];
+  readTime: number;
+  views: number;
+  status: ArticleStatus;
+  featured: boolean;
+  publishedAt: Date | null;
+  author: Pick<User, "id" | "firstName" | "lastName"> | null;
+  authorId: string | null;
+  category: Category | null;
+  categoryId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type ArticleInput = {
+  title: string;
+  content: string;
+  excerpt?: string;
+  categoryId?: string;
+  tags?: string[];
+  status?: ArticleStatus;
+  featured?: boolean;
+};
+
+export type PaginatedResponse<T> = {
+  data: T[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPrevPage: boolean;
+  };
+};

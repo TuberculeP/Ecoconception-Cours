@@ -1,11 +1,37 @@
 <template>
   <div class="min-h-screen bg-background">
-    <header
-      v-if="isAuthenticated"
-      class="border-b p-4 flex items-center justify-between"
-    >
-      <span class="text-foreground">Bienvenue, {{ user?.firstName }}</span>
-      <Button variant="outline" @click="disconnect">Déconnexion</Button>
+    <header class="border-b p-4 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <router-link to="/" class="font-semibold text-foreground">
+          Accueil
+        </router-link>
+        <router-link
+          to="/feed"
+          class="text-muted-foreground hover:text-foreground"
+        >
+          Articles
+        </router-link>
+        <router-link
+          v-if="isAuthenticated"
+          to="/admin/articles"
+          class="text-muted-foreground hover:text-foreground"
+        >
+          Admin
+        </router-link>
+      </div>
+      <div class="flex items-center gap-4">
+        <template v-if="isAuthenticated">
+          <span class="text-foreground text-sm">{{ user?.firstName }}</span>
+          <Button variant="outline" size="sm" @click="disconnect"
+            >Déconnexion</Button
+          >
+        </template>
+        <template v-else>
+          <router-link to="/login">
+            <Button variant="outline" size="sm">Connexion</Button>
+          </router-link>
+        </template>
+      </div>
     </header>
     <main class="p-4">
       <slot />
@@ -24,11 +50,8 @@ const { user, isAuthenticated } = storeToRefs(useAuthStore());
 async function disconnect() {
   const result = await apiClient.post("/auth/logout");
   if (result.data) {
-    console.log("Déconnexion réussie");
     user.value = undefined;
     window.location.reload();
-  } else {
-    console.error("Erreur lors de la déconnexion :", result.error);
   }
 }
 </script>

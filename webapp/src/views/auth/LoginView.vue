@@ -129,7 +129,7 @@ async function submitForm() {
   const result = await apiClient.post<{ user: User }>("/auth/login", form);
 
   if (!result.error) {
-    router.push({ name: redirect ?? "landing-main" });
+    router.push({ name: redirect ?? "admin-articles" });
   } else {
     error.value = "Email ou mot de passe incorrect";
   }
