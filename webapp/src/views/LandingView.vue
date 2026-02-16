@@ -329,7 +329,10 @@
                 class="w-full h-full object-cover"
               />
             </div>
-            <div v-else class="w-full h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center">
+            <div
+              v-else
+              class="w-full h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center"
+            >
               <FileText class="w-12 h-12 text-muted-foreground" />
             </div>
             <CardHeader>
@@ -363,9 +366,12 @@
                 v-if="article.author"
                 class="flex items-center gap-2 text-sm text-muted-foreground"
               >
-                <div class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
+                <div
+                  class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center"
+                >
                   <span class="text-xs font-medium text-primary">
-                    {{ article.author.firstName?.charAt(0) }}{{ article.author.lastName?.charAt(0) }}
+                    {{ article.author.firstName?.charAt(0)
+                    }}{{ article.author.lastName?.charAt(0) }}
                   </span>
                 </div>
                 {{ article.author.firstName }} {{ article.author.lastName }}
@@ -847,7 +853,6 @@ interface Testimonial {
   comment: string;
   rating: number;
 }
-
 
 interface Statistic {
   id: string;

@@ -230,7 +230,9 @@ router.post("/", async (req, res): Promise<void> => {
     relations: ["author", "category"],
   });
 
-  res.status(201).json({ data: savedArticle ? enrichArticleWithCover(savedArticle) : null });
+  res
+    .status(201)
+    .json({ data: savedArticle ? enrichArticleWithCover(savedArticle) : null });
 });
 
 // PUT /api/articles/:id - Modifier un article (authentifié)
@@ -289,7 +291,9 @@ router.put("/:id", async (req, res): Promise<void> => {
     relations: ["author", "category"],
   });
 
-  res.json({ data: updatedArticle ? enrichArticleWithCover(updatedArticle) : null });
+  res.json({
+    data: updatedArticle ? enrichArticleWithCover(updatedArticle) : null,
+  });
 });
 
 // DELETE /api/articles/:id - Supprimer un article (authentifié)

@@ -15,7 +15,10 @@
         class="border-b pb-8 last:border-0"
       >
         <router-link :to="`/article/${article.slug}`" class="group">
-          <div v-if="article.coverImage" class="w-full h-48 overflow-hidden rounded-lg mb-4">
+          <div
+            v-if="article.coverImage"
+            class="w-full h-48 overflow-hidden rounded-lg mb-4"
+          >
             <img
               :src="article.coverImage"
               :alt="article.title"

@@ -56,7 +56,10 @@ if (S3_BUCKET && S3_ACCESS_KEY_ID && S3_SECRET_ACCESS_KEY) {
 }
 
 // Retourne l'URL complète via le proxy backend
-export const getFileUrl = (file: Express.Multer.File, baseUrl: string): string => {
+export const getFileUrl = (
+  file: Express.Multer.File,
+  baseUrl: string,
+): string => {
   const filename = isS3Enabled
     ? ((file as any).key as string).replace("uploads/", "")
     : file.filename;
