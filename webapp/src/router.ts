@@ -3,6 +3,10 @@ import { createRouter, createWebHistory } from "vue-router";
 import LoginView from "./views/auth/LoginView.vue";
 import RegisterView from "./views/auth/RegisterView.vue";
 import LandingView from "./views/LandingView.vue";
+import FeedView from "./views/FeedView.vue";
+import ArticleView from "./views/ArticleView.vue";
+import ArticlesListView from "./views/admin/ArticlesListView.vue";
+import ArticleEditorView from "./views/admin/ArticleEditorView.vue";
 
 import { useAuthStore } from "./stores/authStore";
 import apiClient from "./lib/utils/apiClient";
@@ -29,12 +33,34 @@ const routes = [
   { path: "/dashboard", component: Main, name: "dashboard" },
   { path: "/login", component: LoginView, name: "app-login" },
   { path: "/register", component: RegisterView, name: "app-register" },
+  // Public articles
+  { path: "/feed", component: FeedView, name: "feed" },
+  { path: "/article/:slug", component: ArticleView, name: "article" },
+  // Admin articles
+  {
+    path: "/admin/articles",
+    component: ArticlesListView,
+    name: "admin-articles",
+  },
+  {
+    path: "/admin/articles/new",
+    component: ArticleEditorView,
+    name: "admin-articles-new",
+  },
+  {
+    path: "/admin/articles/:id/edit",
+    component: ArticleEditorView,
+    name: "admin-articles-edit",
+  },
 ];
 
 const getGuardedRoutes = () => {
-  const guardedPaths = ["/dashboard"];
+  const guardedPaths = ["/dashboard", "/admin/articles", "/admin/articles/new"];
   return routes.map((route) => {
-    if (guardedPaths.includes(route.path)) {
+    if (
+      guardedPaths.includes(route.path) ||
+      route.path.startsWith("/admin/articles/")
+    ) {
       return {
         ...route,
         beforeEnter: authGuard,
