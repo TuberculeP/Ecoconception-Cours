@@ -52,6 +52,25 @@
       <button
         type="button"
         class="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
+        title="Image"
+        :disabled="uploading"
+        @click="fileInputRef?.click()"
+      >
+        <span class="text-sm">🖼️</span>
+      </button>
+      <input
+        ref="fileInputRef"
+        type="file"
+        accept="image/*"
+        class="hidden"
+        @change="handleImageUpload"
+      />
+      <span v-if="uploading" class="text-xs text-muted-foreground px-1">
+        Upload...
+      </span>
+      <button
+        type="button"
+        class="p-1.5 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
         title="Code"
         @click="insertFormat('`', '`')"
       >
@@ -99,6 +118,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+import apiClient from "@/lib/utils/apiClient";
 
 const props = withDefaults(
   defineProps<{
@@ -117,7 +137,9 @@ const emit = defineEmits<{
 }>();
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
+const fileInputRef = ref<HTMLInputElement | null>(null);
 const showPreview = ref(false);
+const uploading = ref(false);
 
 function onInput(event: Event) {
   const target = event.target as HTMLTextAreaElement;
@@ -169,6 +191,30 @@ function insertAtLineStart(prefix: string) {
   });
 }
 
+async function handleImageUpload(event: Event) {
+  const target = event.target as HTMLInputElement;
+  const file = target.files?.[0];
+  if (!file) return;
+
+  uploading.value = true;
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const result = await apiClient.post<{ url: string }>(
+    "/shared/uploads",
+    formData,
+  );
+
+  uploading.value = false;
+  target.value = "";
+
+  if (result.data) {
+    const alt = file.name.replace(/\.[^/.]+$/, "");
+    insertFormat(`![${alt}](`, `${result.data.url})`);
+  }
+}
+
 function onKeydown(event: KeyboardEvent) {
   if (event.ctrlKey || event.metaKey) {
     if (event.key === "b") {
@@ -200,6 +246,10 @@ function renderMarkdown(text: string): string {
   html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
+  html = html.replace(
+    /!\[([^\]]*)\]\(([^)]+)\)/g,
+    '<img src="$2" alt="$1" class="max-w-full h-auto rounded" />',
+  );
   html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
   html = html.replace(/^- (.+)$/gm, "<li>$1</li>");
   html = html.replace(/(<li>.*<\/li>)/s, "<ul>$1</ul>");
@@ -212,6 +262,8 @@ function renderMarkdown(text: string): string {
   html = html.replace(/(<\/pre>)<\/p>/g, "$1");
   html = html.replace(/<p>(<ul>)/g, "$1");
   html = html.replace(/(<\/ul>)<\/p>/g, "$1");
+  html = html.replace(/<p>(<img)/g, "$1");
+  html = html.replace(/(\/?>)<\/p>/g, "$1");
 
   return html;
 }

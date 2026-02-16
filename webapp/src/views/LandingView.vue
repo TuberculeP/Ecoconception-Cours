@@ -319,13 +319,22 @@
           <Card
             v-for="article in articles"
             :key="article.id"
-            class="overflow-hidden hover:shadow-lg transition-shadow"
+            class="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+            @click="router.push(`/article/${article.slug}`)"
           >
-            <img
-              :src="article.coverImage"
-              :alt="article.title"
-              class="w-full h-48 object-cover"
-            />
+            <div v-if="article.coverImage" class="w-full h-48 overflow-hidden">
+              <img
+                :src="article.coverImage"
+                :alt="article.title"
+                class="w-full h-full object-cover"
+              />
+            </div>
+            <div
+              v-else
+              class="w-full h-48 bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center"
+            >
+              <FileText class="w-12 h-12 text-muted-foreground" />
+            </div>
             <CardHeader>
               <div
                 class="flex items-center gap-2 text-sm text-muted-foreground mb-2"
@@ -357,11 +366,14 @@
                 v-if="article.author"
                 class="flex items-center gap-2 text-sm text-muted-foreground"
               >
-                <img
-                  :src="article.author.avatar"
-                  :alt="article.author.firstName"
-                  class="w-6 h-6 rounded-full"
-                />
+                <div
+                  class="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center"
+                >
+                  <span class="text-xs font-medium text-primary">
+                    {{ article.author.firstName?.charAt(0)
+                    }}{{ article.author.lastName?.charAt(0) }}
+                  </span>
+                </div>
                 {{ article.author.firstName }} {{ article.author.lastName }}
               </div>
             </CardContent>
@@ -735,6 +747,7 @@ import {
   Github,
   Linkedin,
   Youtube,
+  FileText,
 } from "lucide-vue-next";
 import { Button } from "@/components/ui/button";
 import {
@@ -747,6 +760,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/utils/apiClient";
+import type { Article, Category } from "@/lib/utils/types";
 
 import { useI18n } from "vue-i18n";
 import LanguageSwitcher from "../components/custom/LanguageSwitcher.vue";
@@ -838,33 +852,6 @@ interface Testimonial {
   avatar: string;
   comment: string;
   rating: number;
-}
-
-interface Author {
-  id: string;
-  firstName: string;
-  lastName: string;
-  avatar: string;
-}
-
-interface Category {
-  id: string;
-  name: string;
-  slug: string;
-  color: string;
-}
-
-interface Article {
-  id: string;
-  title: string;
-  slug: string;
-  excerpt: string;
-  coverImage: string;
-  publishedAt: string;
-  readTime: number;
-  views: number;
-  author?: Author;
-  category?: Category;
 }
 
 interface Statistic {
@@ -981,7 +968,8 @@ function toggleFaq(idx: number) {
   openFaq.value = openFaq.value === idx ? null : idx;
 }
 
-function formatDate(dateString: string): string {
+function formatDate(dateString: string | Date | null): string {
+  if (!dateString) return "";
   const date = new Date(dateString);
   return date.toLocaleDateString("fr-FR", {
     day: "numeric",
@@ -1045,9 +1033,9 @@ async function submitContact() {
 
 async function fetchArticles() {
   articlesLoading.value = true;
-  const result = await apiClient.get<{ data: Article[] }>(
-    "/cms/articles/recent",
-    { limit: 6 },
+  const result = await apiClient.get<{ data: Article[]; pagination: unknown }>(
+    "/articles",
+    { limit: 3 },
   );
   if (!result.error && result.data?.data) {
     articles.value = result.data.data;

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import pg from "../../config/db.config";
 import { Upload } from "../../config/entities/Upload";
-import storage from "../../config/storage.config";
+import storage, { getFileUrl } from "../../config/storage.config";
 
 const uploadsRouter = Router();
 
@@ -11,24 +11,29 @@ uploadsRouter.post("/", storage.single("file"), async (req, res) => {
     return;
   }
 
-  const file = req.file; // Récupère le fichier traité par multer
+  const file = req.file;
   if (!file) {
     res.status(400).json({ message: "No file provided" });
     return;
   }
 
+  // Construire le baseUrl depuis la requête
+  const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+  const host = req.headers["x-forwarded-host"] || req.get("host");
+  const baseUrl = `${protocol}://${host}`;
+
+  const url = getFileUrl(file, baseUrl);
+
   const uploadRepository = pg.getRepository(Upload);
   const upload = new Upload();
-  upload.filename = file.filename;
+  upload.filename = file.filename || (file as any).key;
+  upload.url = url;
   upload.user = req.user;
-  upload.createdAt = new Date();
-  upload.updatedAt = new Date();
-  upload.isActive = true;
   await uploadRepository.save(upload);
 
   res.status(201).json({
     message: "File uploaded successfully",
-    url: `/public/uploads/${file.filename}`,
+    url,
   });
 });
 

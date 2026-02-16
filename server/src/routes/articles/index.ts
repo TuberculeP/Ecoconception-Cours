@@ -23,6 +23,20 @@ function calculateReadTime(content: string): number {
   return Math.max(1, Math.ceil(words / wordsPerMinute));
 }
 
+function extractFirstImage(content: string): string | null {
+  const match = content.match(/!\[[^\]]*\]\(([^)]+)\)/);
+  return match ? match[1] : null;
+}
+
+function enrichArticleWithCover<T extends { content: string }>(
+  article: T,
+): T & { coverImage: string | null } {
+  return {
+    ...article,
+    coverImage: extractFirstImage(article.content),
+  };
+}
+
 // GET /api/articles - Liste des articles publiés (public)
 router.get("/", async (req, res) => {
   const page = parseInt(req.query.page as string) || 1;
@@ -47,7 +61,7 @@ router.get("/", async (req, res) => {
   const totalPages = Math.ceil(total / limit);
 
   res.json({
-    data: articles,
+    data: articles.map(enrichArticleWithCover),
     pagination: {
       page,
       limit,
@@ -87,7 +101,7 @@ router.get("/admin", async (req, res): Promise<void> => {
   const totalPages = Math.ceil(total / limit);
 
   res.json({
-    data: articles,
+    data: articles.map(enrichArticleWithCover),
     pagination: {
       page,
       limit,
@@ -140,12 +154,21 @@ router.post("/categories", async (req, res): Promise<void> => {
   res.status(201).json({ data: category });
 });
 
+// Helper pour valider un UUID
+const isUUID = (str: string): boolean =>
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(str);
+
 // GET /api/articles/:idOrSlug - Détail d'un article
 router.get("/:idOrSlug", async (req, res): Promise<void> => {
   const { idOrSlug } = req.params;
 
+  // Construire la condition de recherche selon le format du paramètre
+  const whereCondition = isUUID(idOrSlug)
+    ? [{ id: idOrSlug }, { slug: idOrSlug }]
+    : [{ slug: idOrSlug }];
+
   const article = await articleRepo().findOne({
-    where: [{ id: idOrSlug }, { slug: idOrSlug }],
+    where: whereCondition,
     relations: ["author", "category"],
   });
 
@@ -160,7 +183,7 @@ router.get("/:idOrSlug", async (req, res): Promise<void> => {
     article.views += 1;
   }
 
-  res.json({ data: article });
+  res.json({ data: enrichArticleWithCover(article) });
 });
 
 // POST /api/articles - Créer un article (authentifié)
@@ -207,7 +230,9 @@ router.post("/", async (req, res): Promise<void> => {
     relations: ["author", "category"],
   });
 
-  res.status(201).json({ data: savedArticle });
+  res
+    .status(201)
+    .json({ data: savedArticle ? enrichArticleWithCover(savedArticle) : null });
 });
 
 // PUT /api/articles/:id - Modifier un article (authentifié)
@@ -266,7 +291,9 @@ router.put("/:id", async (req, res): Promise<void> => {
     relations: ["author", "category"],
   });
 
-  res.json({ data: updatedArticle });
+  res.json({
+    data: updatedArticle ? enrichArticleWithCover(updatedArticle) : null,
+  });
 });
 
 // DELETE /api/articles/:id - Supprimer un article (authentifié)

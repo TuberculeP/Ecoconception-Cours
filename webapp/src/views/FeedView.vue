@@ -16,6 +16,16 @@
       >
         <router-link :to="`/article/${article.slug}`" class="group">
           <div
+            v-if="article.coverImage"
+            class="w-full h-48 overflow-hidden rounded-lg mb-4"
+          >
+            <img
+              :src="article.coverImage"
+              :alt="article.title"
+              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+          <div
             class="flex items-center gap-2 text-sm text-muted-foreground mb-2"
           >
             <span
