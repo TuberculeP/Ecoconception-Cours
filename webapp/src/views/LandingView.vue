@@ -1,6 +1,10 @@
 <template>
   <div class="landing-page">
     <!-- Hero Section -->
+    <div>
+      <LanguageSwitcher />
+      <p>{{ t("welcome") }}</p>
+    </div>
     <section
       class="hero relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/20 py-20"
     >
@@ -10,38 +14,42 @@
             <h1
               class="text-5xl lg:text-6xl font-bold text-foreground leading-tight"
             >
-              Transformez votre vision en
-              <span class="text-primary">réalité digitale</span>
+              {{ t("hero.title") }}
+              <span class="text-primary">{{ t("hero.title_highlight") }}</span>
             </h1>
             <p class="text-xl text-muted-foreground max-w-xl">
-              Notre plateforme innovante vous permet de créer, gérer et
-              optimiser vos projets numériques avec une efficacité sans
-              précédent. Rejoignez des milliers d'utilisateurs satisfaits.
+              {{ t("hero.description") }}
             </p>
             <div class="flex flex-wrap gap-4">
               <Button size="lg" @click="navigateToRegister">
-                Commencer gratuitement
+                {{ t("hero.cta_primary") }}
               </Button>
               <Button size="lg" variant="outline" @click="scrollToFeatures">
-                Découvrir les fonctionnalités
+                {{ t("hero.cta_secondary") }}
               </Button>
             </div>
             <div class="flex items-center gap-8 pt-4">
               <div class="text-center">
                 <p class="text-3xl font-bold text-primary">{{ stats.users }}</p>
-                <p class="text-sm text-muted-foreground">Utilisateurs actifs</p>
+                <p class="text-sm text-muted-foreground">
+                  {{ t("hero.stats.users") }}
+                </p>
               </div>
               <div class="text-center">
                 <p class="text-3xl font-bold text-primary">
                   {{ stats.projects }}
                 </p>
-                <p class="text-sm text-muted-foreground">Projets créés</p>
+                <p class="text-sm text-muted-foreground">
+                  {{ t("hero.stats.projects") }}
+                </p>
               </div>
               <div class="text-center">
                 <p class="text-3xl font-bold text-primary">
                   {{ stats.satisfaction }}
                 </p>
-                <p class="text-sm text-muted-foreground">Satisfaction</p>
+                <p class="text-sm text-muted-foreground">
+                  {{ t("hero.stats.satisfaction") }}
+                </p>
               </div>
             </div>
           </div>
@@ -68,7 +76,7 @@
     <section class="py-12 bg-muted/30 border-y">
       <div class="container mx-auto px-4">
         <p class="text-center text-muted-foreground mb-8">
-          Ils nous font confiance
+          {{ t("logos.trust") }}
         </p>
         <div class="flex flex-wrap justify-center items-center gap-8 lg:gap-16">
           <img
@@ -86,11 +94,9 @@
     <section id="features" class="py-20 bg-background">
       <div class="container mx-auto px-4">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold mb-4">Fonctionnalités puissantes</h2>
+          <h2 class="text-4xl font-bold mb-4">{{ t("features.title") }}</h2>
           <p class="text-lg text-muted-foreground">
-            Découvrez tous les outils dont vous avez besoin pour mener vos
-            projets à bien. Notre suite complète de fonctionnalités répond à
-            tous vos besoins.
+            {{ t("features.description") }}
           </p>
         </div>
 
@@ -130,10 +136,9 @@
     <section class="py-20 bg-muted/30">
       <div class="container mx-auto px-4">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold mb-4">Galerie de projets</h2>
+          <h2 class="text-4xl font-bold mb-4">{{ t("gallery.title") }}</h2>
           <p class="text-lg text-muted-foreground">
-            Explorez les réalisations de notre communauté. Des milliers de
-            projets inspirants créés avec notre plateforme.
+            {{ t("gallery.description") }}
           </p>
         </div>
 
@@ -151,7 +156,9 @@
             <div
               class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
             >
-              <Button variant="secondary" size="sm">Voir le projet</Button>
+              <Button variant="secondary" size="sm">{{
+                t("gallery.view_project")
+              }}</Button>
             </div>
           </div>
         </div>
@@ -163,11 +170,10 @@
       <div class="container mx-auto px-4">
         <div class="text-center max-w-2xl mx-auto mb-16">
           <h2 class="text-4xl font-bold mb-4">
-            Ce que disent nos utilisateurs
+            {{ t("testimonials.title") }}
           </h2>
           <p class="text-lg text-muted-foreground">
-            Des milliers de professionnels et d'entreprises utilisent notre
-            plateforme au quotidien.
+            {{ t("testimonials.description") }}
           </p>
         </div>
 
@@ -233,10 +239,9 @@
     <section class="py-20 bg-muted/30">
       <div class="container mx-auto px-4">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold mb-4">Tarifs transparents</h2>
+          <h2 class="text-4xl font-bold mb-4">{{ t("pricing.title") }}</h2>
           <p class="text-lg text-muted-foreground">
-            Choisissez le plan qui correspond à vos besoins. Pas de frais
-            cachés, pas de surprise.
+            {{ t("pricing.description") }}
           </p>
         </div>
 
@@ -253,7 +258,7 @@
               <span
                 class="bg-primary text-primary-foreground px-3 py-1 rounded-full text-sm font-medium"
               >
-                Populaire
+                {{ t("pricing.popular") }}
               </span>
             </div>
             <CardHeader class="text-center">
@@ -291,10 +296,9 @@
     <section class="py-20 bg-background">
       <div class="container mx-auto px-4">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold mb-4">Derniers articles</h2>
+          <h2 class="text-4xl font-bold mb-4">{{ t("blog.title") }}</h2>
           <p class="text-lg text-muted-foreground">
-            Restez informé des dernières tendances et bonnes pratiques du
-            développement web.
+            {{ t("blog.description") }}
           </p>
         </div>
 
@@ -363,7 +367,7 @@
             </CardContent>
             <CardFooter>
               <Button variant="ghost" class="w-full">
-                Lire l'article
+                {{ t("blog.read_more") }}
                 <ArrowRight class="w-4 h-4 ml-2" />
               </Button>
             </CardFooter>
@@ -376,10 +380,9 @@
     <section class="py-20 bg-muted/30">
       <div class="container mx-auto px-4">
         <div class="text-center max-w-2xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold mb-4">Questions fréquentes</h2>
+          <h2 class="text-4xl font-bold mb-4">{{ t("faq.title") }}</h2>
           <p class="text-lg text-muted-foreground">
-            Retrouvez les réponses aux questions les plus posées par notre
-            communauté.
+            {{ t("faq.description") }}
           </p>
         </div>
 
@@ -410,11 +413,9 @@
     <!-- Newsletter Section -->
     <section class="py-20 bg-primary text-primary-foreground">
       <div class="container mx-auto px-4 text-center">
-        <h2 class="text-4xl font-bold mb-4">Restez informé</h2>
+        <h2 class="text-4xl font-bold mb-4">{{ t("newsletter.title") }}</h2>
         <p class="text-lg opacity-90 max-w-xl mx-auto mb-8">
-          Inscrivez-vous à notre newsletter pour recevoir les dernières
-          actualités, tutoriels et offres exclusives directement dans votre
-          boîte mail.
+          {{ t("newsletter.description") }}
         </p>
         <form
           @submit.prevent="submitNewsletter"
@@ -423,7 +424,7 @@
           <Input
             v-model="newsletterEmail"
             type="email"
-            placeholder="Votre adresse email"
+            :placeholder="t('newsletter.placeholder')"
             class="flex-1 bg-primary-foreground text-foreground"
           />
           <Button
@@ -431,7 +432,11 @@
             variant="secondary"
             :disabled="newsletterLoading"
           >
-            {{ newsletterLoading ? "Envoi..." : "S'inscrire" }}
+            {{
+              newsletterLoading
+                ? t("newsletter.cta_loading")
+                : t("newsletter.cta")
+            }}
           </Button>
         </form>
         <p v-if="newsletterMessage" class="mt-4 text-sm">
@@ -445,10 +450,9 @@
       <div class="container mx-auto px-4">
         <div class="grid lg:grid-cols-2 gap-12">
           <div>
-            <h2 class="text-4xl font-bold mb-4">Contactez-nous</h2>
+            <h2 class="text-4xl font-bold mb-4">{{ t("contact.title") }}</h2>
             <p class="text-lg text-muted-foreground mb-8">
-              Une question ? Un projet ? N'hésitez pas à nous contacter. Notre
-              équipe vous répondra dans les plus brefs délais.
+              {{ t("contact.description") }}
             </p>
             <div class="space-y-6">
               <div class="flex items-center gap-4">
@@ -458,9 +462,9 @@
                   <MapPin class="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p class="font-semibold">Adresse</p>
+                  <p class="font-semibold">{{ t("contact.address") }}</p>
                   <p class="text-muted-foreground">
-                    123 Rue de l'Innovation, 75001 Paris
+                    {{ t("contact.address_value") }}
                   </p>
                 </div>
               </div>
@@ -471,8 +475,10 @@
                   <Mail class="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p class="font-semibold">Email</p>
-                  <p class="text-muted-foreground">contact@example.com</p>
+                  <p class="font-semibold">{{ t("contact.email") }}</p>
+                  <p class="text-muted-foreground">
+                    {{ t("contact.email_value") }}
+                  </p>
                 </div>
               </div>
               <div class="flex items-center gap-4">
@@ -482,8 +488,10 @@
                   <Phone class="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p class="font-semibold">Téléphone</p>
-                  <p class="text-muted-foreground">+33 1 23 45 67 89</p>
+                  <p class="font-semibold">{{ t("contact.phone") }}</p>
+                  <p class="text-muted-foreground">
+                    {{ t("contact.phone_value") }}
+                  </p>
                 </div>
               </div>
             </div>
@@ -495,53 +503,67 @@
           </div>
           <Card>
             <CardHeader>
-              <CardTitle>Envoyez-nous un message</CardTitle>
-              <CardDescription
-                >Remplissez le formulaire ci-dessous et nous vous recontacterons
-                rapidement.</CardDescription
-              >
+              <CardTitle>{{ t("contact.form.title") }}</CardTitle>
+              <CardDescription>{{
+                t("contact.form.description")
+              }}</CardDescription>
             </CardHeader>
             <CardContent>
               <form @submit.prevent="submitContact" class="space-y-4">
                 <div class="grid sm:grid-cols-2 gap-4">
                   <div class="space-y-2">
-                    <label class="text-sm font-medium">Prénom</label>
-                    <Input v-model="contactForm.firstName" placeholder="Jean" />
+                    <label class="text-sm font-medium">{{
+                      t("contact.form.firstName")
+                    }}</label>
+                    <Input
+                      v-model="contactForm.firstName"
+                      :placeholder="t('contact.form.firstName_placeholder')"
+                    />
                   </div>
                   <div class="space-y-2">
-                    <label class="text-sm font-medium">Nom</label>
+                    <label class="text-sm font-medium">{{
+                      t("contact.form.lastName")
+                    }}</label>
                     <Input
                       v-model="contactForm.lastName"
-                      placeholder="Dupont"
+                      :placeholder="t('contact.form.lastName_placeholder')"
                     />
                   </div>
                 </div>
                 <div class="space-y-2">
-                  <label class="text-sm font-medium">Email</label>
+                  <label class="text-sm font-medium">{{
+                    t("contact.form.email")
+                  }}</label>
                   <Input
                     v-model="contactForm.email"
                     type="email"
-                    placeholder="jean.dupont@example.com"
+                    :placeholder="t('contact.form.email_placeholder')"
                   />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-sm font-medium">Sujet</label>
+                  <label class="text-sm font-medium">{{
+                    t("contact.form.subject")
+                  }}</label>
                   <Input
                     v-model="contactForm.subject"
-                    placeholder="Sujet de votre message"
+                    :placeholder="t('contact.form.subject_placeholder')"
                   />
                 </div>
                 <div class="space-y-2">
-                  <label class="text-sm font-medium">Message</label>
+                  <label class="text-sm font-medium">{{
+                    t("contact.form.message")
+                  }}</label>
                   <textarea
                     v-model="contactForm.message"
                     class="w-full min-h-32 px-3 py-2 rounded-md border bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                    placeholder="Votre message..."
+                    :placeholder="t('contact.form.message_placeholder')"
                   ></textarea>
                 </div>
                 <Button type="submit" class="w-full" :disabled="contactLoading">
                   {{
-                    contactLoading ? "Envoi en cours..." : "Envoyer le message"
+                    contactLoading
+                      ? t("contact.form.submit_loading")
+                      : t("contact.form.submit")
                   }}
                 </Button>
                 <p
@@ -563,84 +585,91 @@
       <div class="container mx-auto px-4">
         <div class="grid md:grid-cols-4 gap-8 mb-8">
           <div>
-            <h3 class="font-bold text-lg mb-4">À propos</h3>
+            <h3 class="font-bold text-lg mb-4">
+              {{ t("footer.about.title") }}
+            </h3>
             <p class="text-sm text-muted-foreground">
-              Notre mission est de démocratiser le développement web en
-              fournissant des outils puissants et accessibles à tous.
+              {{ t("footer.about.description") }}
             </p>
           </div>
           <div>
-            <h3 class="font-bold text-lg mb-4">Produit</h3>
+            <h3 class="font-bold text-lg mb-4">
+              {{ t("footer.product.title") }}
+            </h3>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Fonctionnalités</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.product.features")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Tarifs</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.product.pricing")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Documentation</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.product.documentation")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >API</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.product.api")
+                }}</a>
               </li>
             </ul>
           </div>
           <div>
-            <h3 class="font-bold text-lg mb-4">Ressources</h3>
+            <h3 class="font-bold text-lg mb-4">
+              {{ t("footer.resources.title") }}
+            </h3>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Blog</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.resources.blog")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Tutoriels</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.resources.tutorials")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Support</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.resources.support")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Communauté</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.resources.community")
+                }}</a>
               </li>
             </ul>
           </div>
           <div>
-            <h3 class="font-bold text-lg mb-4">Légal</h3>
+            <h3 class="font-bold text-lg mb-4">
+              {{ t("footer.legal.title") }}
+            </h3>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Conditions d'utilisation</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.legal.terms")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Politique de confidentialité</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.legal.privacy")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Mentions légales</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.legal.mentions")
+                }}</a>
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors"
-                  >Cookies</a
-                >
+                <a href="#" class="hover:text-foreground transition-colors">{{
+                  t("footer.legal.cookies")
+                }}</a>
               </li>
             </ul>
           </div>
@@ -649,7 +678,7 @@
           class="border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4"
         >
           <p class="text-sm text-muted-foreground">
-            © 2026 VotreEntreprise. Tous droits réservés.
+            {{ t("footer.copyright") }}
           </p>
           <div class="flex gap-4">
             <a
@@ -719,6 +748,11 @@ import {
 import { Input } from "@/components/ui/input";
 import apiClient from "@/lib/utils/apiClient";
 
+import { useI18n } from "vue-i18n";
+import LanguageSwitcher from "../components/custom/LanguageSwitcher.vue";
+
+const { t } = useI18n();
+
 const router = useRouter();
 
 const stats = ref({
@@ -730,73 +764,68 @@ const stats = ref({
 const features = [
   {
     icon: Zap,
-    title: "Performance optimale",
-    description:
-      "Des temps de chargement ultra-rapides grâce à notre infrastructure mondiale.",
+    title: t("features.performance.title"),
+    description: t("features.performance.description"),
     items: [
-      "CDN global",
-      "Mise en cache intelligente",
-      "Compression automatique",
-      "HTTP/3 support",
+      t("features.performance.item1"),
+      t("features.performance.item2"),
+      t("features.performance.item3"),
+      t("features.performance.item4"),
     ],
   },
   {
     icon: Shield,
-    title: "Sécurité renforcée",
-    description:
-      "Protection de vos données avec les dernières technologies de sécurité.",
+    title: t("features.security.title"),
+    description: t("features.security.description"),
     items: [
-      "Chiffrement SSL/TLS",
-      "Protection DDoS",
-      "Authentification 2FA",
-      "Audits réguliers",
+      t("features.security.item1"),
+      t("features.security.item2"),
+      t("features.security.item3"),
+      t("features.security.item4"),
     ],
   },
   {
     icon: BarChart3,
-    title: "Analytics avancées",
-    description:
-      "Suivez vos performances en temps réel avec des tableaux de bord détaillés.",
+    title: t("features.analytics.title"),
+    description: t("features.analytics.description"),
     items: [
-      "Métriques en temps réel",
-      "Rapports personnalisés",
-      "Alertes automatiques",
-      "Export des données",
+      t("features.analytics.item1"),
+      t("features.analytics.item2"),
+      t("features.analytics.item3"),
+      t("features.analytics.item4"),
     ],
   },
   {
     icon: Users,
-    title: "Collaboration d'équipe",
-    description: "Travaillez efficacement avec votre équipe sur vos projets.",
+    title: t("features.collaboration.title"),
+    description: t("features.collaboration.description"),
     items: [
-      "Espaces de travail partagés",
-      "Gestion des permissions",
-      "Historique des modifications",
-      "Commentaires intégrés",
+      t("features.collaboration.item1"),
+      t("features.collaboration.item2"),
+      t("features.collaboration.item3"),
+      t("features.collaboration.item4"),
     ],
   },
   {
     icon: Cloud,
-    title: "Cloud natif",
-    description:
-      "Déployez vos applications sur notre infrastructure cloud évolutive.",
+    title: t("features.cloud.title"),
+    description: t("features.cloud.description"),
     items: [
-      "Auto-scaling",
-      "Déploiement continu",
-      "Environnements de staging",
-      "Rollback instantané",
+      t("features.cloud.item1"),
+      t("features.cloud.item2"),
+      t("features.cloud.item3"),
+      t("features.cloud.item4"),
     ],
   },
   {
     icon: Code,
-    title: "API puissante",
-    description:
-      "Intégrez nos services facilement avec notre API RESTful complète.",
+    title: t("features.api.title"),
+    description: t("features.api.description"),
     items: [
-      "Documentation complète",
-      "SDKs officiels",
-      "Webhooks",
-      "Rate limiting flexible",
+      t("features.api.item1"),
+      t("features.api.item2"),
+      t("features.api.item3"),
+      t("features.api.item4"),
     ],
   },
 ];
