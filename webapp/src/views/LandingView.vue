@@ -1,10 +1,6 @@
 <template>
   <div class="landing-page">
     <!-- Hero Section -->
-    <div>
-      <LanguageSwitcher />
-      <p>{{ t("welcome") }}</p>
-    </div>
     <section
       class="hero relative overflow-hidden bg-gradient-to-br from-primary/10 via-background to-secondary/20 py-20"
     >
@@ -763,7 +759,6 @@ import apiClient from "@/lib/utils/apiClient";
 import type { Article, Category } from "@/lib/utils/types";
 
 import { useI18n } from "vue-i18n";
-import LanguageSwitcher from "../components/custom/LanguageSwitcher.vue";
 
 const { t } = useI18n();
 
