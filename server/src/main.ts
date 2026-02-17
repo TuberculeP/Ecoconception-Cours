@@ -3,9 +3,6 @@ import pg from "./config/db.config";
 import path from "path";
 import express from "express";
 import { createServer as createViteServer } from "vite";
-import { createServer as createHttpServer } from "http";
-import { Server as WSServer } from "socket.io";
-import { registerWebsocketListeners } from "./events/event_handler";
 import router from "./routes";
 import cookieParser from "cookie-parser";
 import passport from "passport";
@@ -19,7 +16,6 @@ const main = async () => {
   initializePassport();
 
   const app = express();
-  const server = createHttpServer(app);
   app
     .use(express.json())
     .use(customSession())
@@ -52,11 +48,7 @@ const main = async () => {
     }
   });
 
-  // WebSocket server
-  const wss = new WSServer(server);
-  registerWebsocketListeners(wss);
-
-  server.listen(3000, () => {
+  app.listen(3000, () => {
     console.log("> Ready on http://localhost:3000");
   });
 };

@@ -1,17 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import LoginView from "./views/auth/LoginView.vue";
-import RegisterView from "./views/auth/RegisterView.vue";
 import LandingView from "./views/LandingView.vue";
-import FeedView from "./views/FeedView.vue";
-import ArticleView from "./views/ArticleView.vue";
-import ArticlesListView from "./views/admin/ArticlesListView.vue";
-import ArticleEditorView from "./views/admin/ArticleEditorView.vue";
 
 import { useAuthStore } from "./stores/authStore";
 import apiClient from "./lib/utils/apiClient";
 import type { User } from "./lib/utils/types";
-import Main from "./views/Main.vue";
+
+const LoginView = () => import("./views/auth/LoginView.vue");
+const RegisterView = () => import("./views/auth/RegisterView.vue");
+const FeedView = () => import("./views/FeedView.vue");
+const ArticleView = () => import("./views/ArticleView.vue");
+const ArticlesListView = () => import("./views/admin/ArticlesListView.vue");
+const ArticleEditorView = () => import("./views/admin/ArticleEditorView.vue");
+const Main = () => import("./views/Main.vue");
 
 async function authGuard(to: any, from: any, next: any) {
   const authStore = useAuthStore();

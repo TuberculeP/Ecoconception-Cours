@@ -55,12 +55,12 @@
           </div>
           <div class="relative">
             <img
-              src="https://picsum.photos/600/400?random=1"
+              src="https://picsum.photos/seed/hero-main/600/400"
               alt="Dashboard preview"
               class="rounded-xl shadow-2xl w-full"
             />
             <img
-              src="https://picsum.photos/300/200?random=2"
+              src="https://picsum.photos/seed/hero-feature/300/200"
               alt="Feature preview"
               class="absolute -bottom-8 -left-8 rounded-lg shadow-xl hidden lg:block"
             />
@@ -82,7 +82,7 @@
           <img
             v-for="i in 6"
             :key="i"
-            :src="`https://picsum.photos/120/40?random=${i + 10}&grayscale`"
+            :src="`https://picsum.photos/seed/logo-${i}/120/40?grayscale`"
             :alt="`Partner ${i}`"
             class="h-8 opacity-60 hover:opacity-100 transition-opacity"
           />
@@ -149,7 +149,7 @@
             class="relative group overflow-hidden rounded-lg aspect-square"
           >
             <img
-              :src="`https://picsum.photos/400/400?random=${i + 20}`"
+              :src="`https://picsum.photos/seed/gallery-${i}/400/400`"
               :alt="`Project ${i}`"
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             />
@@ -512,7 +512,7 @@
               </div>
             </div>
             <img
-              src="https://picsum.photos/500/300?random=50"
+              src="https://picsum.photos/seed/office/500/300"
               alt="Office"
               class="mt-8 rounded-lg shadow-lg w-full"
             />

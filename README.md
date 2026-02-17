@@ -1,13 +1,13 @@
 # Express Vue PostgreSQL
 
-Stack full-stack moderne avec Express.js, Vue 3, PostgreSQL/SQLite, authentification (Local + Google OAuth), WebSockets et Tailwind CSS.
+Stack full-stack moderne avec Express.js, Vue 3, PostgreSQL/SQLite, authentification (Local + Google OAuth) et Tailwind CSS.
 
 ## Stack technique
 
 | Couche | Technologies |
 |--------|-------------|
-| Backend | Express.js, TypeORM, Passport.js, Socket.io, Multer |
-| Frontend | Vue 3 (Composition API), Pinia, Vue Router, Axios |
+| Backend | Express.js, TypeORM, Passport.js, Multer |
+| Frontend | Vue 3 (Composition API), Pinia, Vue Router, Alova |
 | UI | Tailwind CSS v4, shadcn-vue (reka-ui), Lucide Icons |
 | Base de donnees | PostgreSQL (prod) / SQLite (dev) |
 | Sessions | Redis (prod) / SQLite (dev) |
@@ -17,17 +17,16 @@ Stack full-stack moderne avec Express.js, Vue 3, PostgreSQL/SQLite, authentifica
 
 ```
 ├── server/src/
-│   ├── main.ts                    # Point d'entree Express + Socket.io
+│   ├── main.ts                    # Point d'entree Express
 │   ├── config/
 │   │   ├── db.config.ts           # Configuration TypeORM
 │   │   ├── passport.config.ts     # Strategies d'authentification
 │   │   ├── cache.config.ts        # Store de sessions (Redis/SQLite)
 │   │   ├── storage.config.ts      # Configuration Multer (uploads)
 │   │   └── entities/              # Entites TypeORM (User, Upload)
-│   ├── routes/
-│   │   ├── auth/index.ts          # Routes d'authentification
-│   │   └── shared/uploads.ts      # Route d'upload de fichiers
-│   └── events/                    # Handlers WebSocket
+│   └── routes/
+│       ├── auth/index.ts          # Routes d'authentification
+│       └── shared/uploads.ts      # Route d'upload de fichiers
 │
 ├── webapp/src/
 │   ├── main.ts                    # Initialisation Vue
@@ -40,8 +39,7 @@ Stack full-stack moderne avec Express.js, Vue 3, PostgreSQL/SQLite, authentifica
 │   └── lib/
 │       ├── utils.ts               # Utilitaire cn() pour les classes
 │       └── utils/
-│           ├── apiClient.ts       # Client HTTP Axios
-│           ├── websocket.ts       # Utilitaires Socket.io
+│           ├── apiClient.ts       # Client HTTP Alova
 │           └── types.ts           # Types TypeScript
 │
 ├── public/uploads/                # Fichiers uploades
@@ -126,25 +124,6 @@ const { data, error } = await apiClient.post("/shared/uploads", formData);
 
 Le client retourne toujours `{ data, error }` et ne throw jamais d'exception.
 
-### WebSocket
-
-```typescript
-import { onSocketConnected, onSocketEvent, socket } from "@/lib/utils/websocket";
-
-// Ecouter la connexion
-onSocketConnected(() => {
-  console.log("Connecte au serveur WebSocket");
-});
-
-// Ecouter un evenement
-onSocketEvent("test:response", (data) => {
-  console.log("Reponse recue:", data);
-});
-
-// Emettre un evenement
-socket.emit("test:default", { message: "Hello" });
-```
-
 ### Auth Store (Pinia)
 
 ```typescript
@@ -185,31 +164,6 @@ export default exampleRouter;
 import exampleRouter from "./example";
 
 router.use("/example", exampleRouter);
-```
-
-## Ajouter un evenement WebSocket
-
-1. Creer le handler dans `server/src/events/`
-2. L'enregistrer dans `eventGroupList`
-
-```typescript
-// server/src/events/chat.event.ts
-import { Socket } from "socket.io";
-
-export const prefix = "chat";
-
-export function handleEvents(socket: Socket) {
-  socket.on("chat:message", (data) => {
-    socket.broadcast.emit("chat:message", data);
-  });
-}
-```
-
-```typescript
-// server/src/events/event_handler.ts
-import * as chatEvents from "./chat.event";
-
-const eventGroupList = [testEvents, chatEvents];
 ```
 
 ## Ajouter une entite TypeORM
