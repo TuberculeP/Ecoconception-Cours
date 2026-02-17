@@ -7,6 +7,7 @@ import router from "./routes";
 import cookieParser from "cookie-parser";
 import passport from "passport";
 import initializePassport from "./config/passport.config";
+import { Article } from "./config/entities/Article";
 
 import customSession from "./config/cache.config";
 
@@ -25,6 +26,59 @@ const main = async () => {
     .use(passport.session());
 
   app.use("/api", router);
+
+  const getBaseUrl = (req: express.Request) => {
+    const protocol = req.headers["x-forwarded-proto"] || req.protocol;
+    const host = req.headers["x-forwarded-host"] || req.get("host");
+    return `${protocol}://${host}`;
+  };
+
+  app.get("/robots.txt", (req, res) => {
+    const baseUrl = getBaseUrl(req);
+    res.type("text/plain").send(`User-agent: *
+Allow: /
+
+Sitemap: ${baseUrl}/sitemap.xml`);
+  });
+
+  app.get("/sitemap.xml", async (req, res) => {
+    const baseUrl = getBaseUrl(req);
+    const articles = await pg.getRepository(Article).find({
+      where: { status: "published" },
+      select: ["slug", "updatedAt"],
+      order: { updatedAt: "DESC" },
+    });
+
+    const staticRoutes = [
+      { url: "/", priority: "1.0" },
+      { url: "/feed", priority: "0.9" },
+      { url: "/login", priority: "0.5" },
+      { url: "/register", priority: "0.5" },
+    ];
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${staticRoutes
+  .map(
+    (route) => `  <url>
+    <loc>${baseUrl}${route.url}</loc>
+    <priority>${route.priority}</priority>
+  </url>`,
+  )
+  .join("\n")}
+${articles
+  .map(
+    (article) => `  <url>
+    <loc>${baseUrl}/article/${article.slug}</loc>
+    <lastmod>${article.updatedAt.toISOString().split("T")[0]}</lastmod>
+    <priority>0.8</priority>
+  </url>`,
+  )
+  .join("\n")}
+</urlset>`;
+
+    res.type("application/xml").send(xml);
+  });
 
   const vite = await createViteServer();
 
