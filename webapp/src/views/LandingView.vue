@@ -181,8 +181,12 @@
           v-if="testimonialsLoading"
           class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          <Card v-for="i in 6" :key="i" class="bg-muted/20 animate-pulse">
-            <CardContent class="pt-6">
+          <div
+            v-for="i in 6"
+            :key="i"
+            class="bg-muted/20 animate-pulse flex flex-col gap-6 rounded-xl border py-6 shadow-sm"
+          >
+            <div class="px-6">
               <div class="flex items-center gap-4 mb-4">
                 <div class="w-12 h-12 rounded-full bg-muted"></div>
                 <div class="space-y-2">
@@ -191,8 +195,8 @@
                 </div>
               </div>
               <div class="h-16 bg-muted rounded"></div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
         <div v-else class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <Card
