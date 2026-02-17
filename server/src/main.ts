@@ -37,7 +37,11 @@ const main = async () => {
   if (dev) {
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.resolve(__dirname, "./client")));
+    app.use(
+      express.static(path.resolve(__dirname, "./client"), {
+        maxAge: "1y",
+      }),
+    );
   }
 
   app.use(async (req, res, next) => {
