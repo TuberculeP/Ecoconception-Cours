@@ -17,13 +17,13 @@ const main = async () => {
   initializePassport();
 
   const app = express();
-  app
-    .use(express.json())
-    .use(customSession())
-    .use(cookieParser())
-    .use(express.json())
-    .use(passport.initialize())
-    .use(passport.session());
+  app.use(express.json());
+  app.use(customSession());
+  app.use(cookieParser());
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  app.get("/health", (_, res) => res.sendStatus(200));
 
   app.use("/api", router);
 

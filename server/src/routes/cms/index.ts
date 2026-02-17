@@ -19,13 +19,8 @@ import {
 
 const router = Router();
 
-// Simuler un délai réseau pour rendre les tests plus réalistes
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 // GET /api/cms/articles - Liste paginée des articles
 router.get("/articles", async (req, res) => {
-  await delay(150);
-
   const page = parseInt(req.query.page as string) || 1;
   const limit = Math.min(parseInt(req.query.limit as string) || 10, 50);
   const categoryId = req.query.category as string;
@@ -92,8 +87,6 @@ router.get("/articles", async (req, res) => {
 
 // GET /api/cms/articles/featured - Articles mis en avant
 router.get("/articles/featured", async (req, res) => {
-  await delay(100);
-
   const limit = Math.min(parseInt(req.query.limit as string) || 3, 10);
   const featuredArticles = getFeaturedArticles().slice(0, limit);
 
@@ -108,8 +101,6 @@ router.get("/articles/featured", async (req, res) => {
 
 // GET /api/cms/articles/recent - Articles récents
 router.get("/articles/recent", async (req, res) => {
-  await delay(120);
-
   const limit = Math.min(parseInt(req.query.limit as string) || 5, 20);
   const recentArticles = getRecentArticles(limit);
 
@@ -124,8 +115,6 @@ router.get("/articles/recent", async (req, res) => {
 
 // GET /api/cms/articles/search - Recherche d'articles
 router.get("/articles/search", async (req, res): Promise<void> => {
-  await delay(200);
-
   const query = req.query.q as string;
   if (!query || query.length < 2) {
     res.status(400).json({ error: "Query must be at least 2 characters" });
@@ -144,8 +133,6 @@ router.get("/articles/search", async (req, res): Promise<void> => {
 
 // GET /api/cms/articles/:idOrSlug - Détail d'un article
 router.get("/articles/:idOrSlug", async (req, res): Promise<void> => {
-  await delay(100);
-
   const { idOrSlug } = req.params;
   let article = getArticleById(idOrSlug) || getArticleBySlug(idOrSlug);
 
@@ -186,8 +173,6 @@ router.get("/articles/:idOrSlug", async (req, res): Promise<void> => {
 
 // GET /api/cms/categories - Liste des catégories
 router.get("/categories", async (_req, res) => {
-  await delay(80);
-
   // Recalculer le nombre d'articles par catégorie
   const enrichedCategories = categories.map((cat) => ({
     ...cat,
@@ -201,8 +186,6 @@ router.get("/categories", async (_req, res) => {
 
 // GET /api/cms/categories/:idOrSlug - Détail d'une catégorie avec ses articles
 router.get("/categories/:idOrSlug", async (req, res): Promise<void> => {
-  await delay(100);
-
   const { idOrSlug } = req.params;
   const category = categories.find(
     (c) => c.id === idOrSlug || c.slug === idOrSlug,
@@ -230,8 +213,6 @@ router.get("/categories/:idOrSlug", async (req, res): Promise<void> => {
 
 // GET /api/cms/authors - Liste des auteurs
 router.get("/authors", async (_req, res) => {
-  await delay(80);
-
   const enrichedAuthors = authors.map((author) => ({
     ...author,
     articleCount: articles.filter(
@@ -244,8 +225,6 @@ router.get("/authors", async (_req, res) => {
 
 // GET /api/cms/authors/:id - Détail d'un auteur avec ses articles
 router.get("/authors/:id", async (req, res): Promise<void> => {
-  await delay(100);
-
   const author = getAuthorById(req.params.id);
 
   if (!author) {
@@ -268,8 +247,6 @@ router.get("/authors/:id", async (req, res): Promise<void> => {
 
 // GET /api/cms/testimonials - Témoignages
 router.get("/testimonials", async (req, res) => {
-  await delay(100);
-
   const featured = req.query.featured === "true";
   const limit = Math.min(parseInt(req.query.limit as string) || 10, 20);
 
@@ -281,15 +258,11 @@ router.get("/testimonials", async (req, res) => {
 
 // GET /api/cms/statistics - Statistiques
 router.get("/statistics", async (_req, res) => {
-  await delay(80);
-
   res.json({ data: statistics });
 });
 
 // GET /api/cms/tags - Liste des tags avec leur fréquence
 router.get("/tags", async (_req, res) => {
-  await delay(80);
-
   const tagCounts: Record<string, number> = {};
 
   articles
@@ -309,8 +282,6 @@ router.get("/tags", async (_req, res) => {
 
 // GET /api/cms/homepage - Données agrégées pour la page d'accueil
 router.get("/homepage", async (_req, res) => {
-  await delay(200);
-
   const featuredArticles = getFeaturedArticles()
     .slice(0, 3)
     .map((article) => ({
