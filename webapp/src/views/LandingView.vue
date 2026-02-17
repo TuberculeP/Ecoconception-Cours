@@ -437,7 +437,7 @@
             v-model="newsletterEmail"
             type="email"
             :placeholder="t('newsletter.placeholder')"
-            class="flex-1 bg-primary-foreground text-foreground"
+            class="flex-1 newsletter-input"
           />
           <Button
             type="submit"
@@ -731,24 +731,28 @@
           <div class="flex gap-4">
             <a
               href="#"
+              aria-label="Twitter"
               class="text-muted-foreground hover:text-foreground transition-colors"
             >
               <Twitter class="w-5 h-5" />
             </a>
             <a
               href="#"
+              aria-label="Github"
               class="text-muted-foreground hover:text-foreground transition-colors"
             >
               <Github class="w-5 h-5" />
             </a>
             <a
               href="#"
+              aria-label="Linkedin"
               class="text-muted-foreground hover:text-foreground transition-colors"
             >
               <Linkedin class="w-5 h-5" />
             </a>
             <a
               href="#"
+              aria-label="Youtube"
               class="text-muted-foreground hover:text-foreground transition-colors"
             >
               <Youtube class="w-5 h-5" />
@@ -759,6 +763,14 @@
     </footer>
   </div>
 </template>
+
+<style scoped>
+.newsletter-input {
+  background-color: #fff !important;
+  color: #222 !important;
+  border: 1px solid #ccc;
+}
+</style>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
