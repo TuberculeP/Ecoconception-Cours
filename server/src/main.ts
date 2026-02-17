@@ -23,7 +23,9 @@ const main = async () => {
   app.use(passport.initialize());
   app.use(passport.session());
 
-  app.get("/health", (_, res) => res.sendStatus(200));
+  app.get("/health", (_, res) => {
+    res.sendStatus(200);
+  });
 
   app.use("/api", router);
 
