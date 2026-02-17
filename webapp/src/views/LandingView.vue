@@ -52,12 +52,12 @@
           <div class="relative">
             <img
               src="https://picsum.photos/seed/hero-main/600/400"
-              alt="Dashboard preview"
+              alt="Main dashboard preview with charts and stats"
               class="rounded-xl shadow-2xl w-full"
             />
             <img
               src="https://picsum.photos/seed/hero-feature/300/200"
-              alt="Feature preview"
+              alt="Highlighted feature preview with analytics graph"
               class="absolute -bottom-8 -left-8 rounded-lg shadow-xl hidden lg:block"
             />
           </div>
@@ -79,7 +79,7 @@
             v-for="i in 6"
             :key="i"
             :src="`https://picsum.photos/seed/logo-${i}/120/40?grayscale`"
-            :alt="`Partner ${i}`"
+            :alt="`Logo of trusted partner number ${i}`"
             class="h-8 opacity-60 hover:opacity-100 transition-opacity"
           />
         </div>
@@ -146,7 +146,7 @@
           >
             <img
               :src="`https://picsum.photos/seed/gallery-${i}/400/400`"
-              :alt="`Project ${i}`"
+              :alt="`Screenshot of project number ${i}`"
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
             />
             <div
@@ -610,24 +610,36 @@
             </h3>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.product.features")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Product features"
+                  >{{ t("footer.product.features") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.product.pricing")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Product pricing"
+                  >{{ t("footer.product.pricing") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.product.documentation")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Product documentation"
+                  >{{ t("footer.product.documentation") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.product.api")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Product API"
+                  >{{ t("footer.product.api") }}</a
+                >
               </li>
             </ul>
           </div>
@@ -637,24 +649,36 @@
             </h3>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.resources.blog")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Blog resource"
+                  >{{ t("footer.resources.blog") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.resources.tutorials")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Tutorials resource"
+                  >{{ t("footer.resources.tutorials") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.resources.support")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Support resource"
+                  >{{ t("footer.resources.support") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.resources.community")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Community resource"
+                  >{{ t("footer.resources.community") }}</a
+                >
               </li>
             </ul>
           </div>
@@ -664,24 +688,36 @@
             </h3>
             <ul class="space-y-2 text-sm text-muted-foreground">
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.legal.terms")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Terms and conditions"
+                  >{{ t("footer.legal.terms") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.legal.privacy")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Privacy policy"
+                  >{{ t("footer.legal.privacy") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.legal.mentions")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Legal mentions"
+                  >{{ t("footer.legal.mentions") }}</a
+                >
               </li>
               <li>
-                <a href="#" class="hover:text-foreground transition-colors">{{
-                  t("footer.legal.cookies")
-                }}</a>
+                <a
+                  href="#"
+                  class="hover:text-foreground transition-colors"
+                  aria-label="Cookie policy"
+                  >{{ t("footer.legal.cookies") }}</a
+                >
               </li>
             </ul>
           </div>
