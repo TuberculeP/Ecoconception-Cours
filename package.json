@@ -14,8 +14,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.990.0",
-    "@elemaudio/core": "^4.0.1",
-    "@elemaudio/web-renderer": "^4.0.3",
     "@types/multer": "^2.0.0",
     "alova": "^3.5.0",
     "bcrypt": "^6.0.0",
@@ -23,7 +21,6 @@
     "clsx": "^2.1.1",
     "connect-redis": "^8.0.0",
     "cookie-parser": "^1.4.7",
-    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "express-session": "^1.18.1",
@@ -40,14 +37,11 @@
     "pinia": "^3.0.2",
     "redis": "^4.7.1",
     "reflect-metadata": "^0.2.2",
-    "smplr": "^0.16.3",
     "sqlite3": "^5.1.7",
-    "tone": "^15.1.22",
     "typeorm": "^0.3.22",
     "vue": "^3.5.13",
     "vue-i18n": "^11.2.8",
-    "vue-router": "^4.5.1",
-    "webmidi": "^3.1.12"
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.31.0",
@@ -70,7 +64,6 @@
     "@vue/tsconfig": "^0.7.0",
     "autoprefixer": "^10.4.22",
     "eslint": "^8.57.1",
-    "eslint-config-next": "14.2.15",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.1",
     "eslint-plugin-unused-imports": "^4.1.4",

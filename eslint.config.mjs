@@ -73,6 +73,9 @@ const webappConfig = {
 };
 
 export default [
+  {
+    ignores: ["node_modules/**", "dist/**", "*.config.js", "*.config.mjs"],
+  },
   serverConfig,
   webappConfig,
   sharedConfig,

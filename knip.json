@@ -1,0 +1,6 @@
+{
+  "entry": ["server/src/main.ts", "webapp/src/main.ts"],
+  "project": ["server/src/**/*.ts", "webapp/src/**/*.{ts,vue}"],
+  "ignore": ["**/*.d.ts"],
+  "ignoreDependencies": ["@types/*"]
+}
