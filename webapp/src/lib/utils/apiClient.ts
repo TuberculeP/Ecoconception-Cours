@@ -1,67 +1,114 @@
-import axios from "axios";
-import type { AxiosError } from "axios";
+import { createAlova } from "alova";
+import adapterFetch from "alova/fetch";
 
-const axiosClient = axios.create({
+const alovaInstance = createAlova({
   baseURL: "/api",
-  withCredentials: true, // Include cookies in requests
-  headers: {
-    "Content-Type": "application/json",
+  requestAdapter: adapterFetch(),
+  cacheFor: null,
+  beforeRequest(method) {
+    method.config.credentials = "include";
+    if (!(method.data instanceof FormData)) {
+      method.config.headers["Content-Type"] = "application/json";
+    }
+  },
+  responded: {
+    onSuccess: async (response) => {
+      if (!response.ok) {
+        throw new Error(response.statusText || "Request failed");
+      }
+      const contentType = response.headers.get("content-type");
+      if (contentType?.includes("application/json")) {
+        return response.json();
+      }
+      return response.text();
+    },
+    onError: (error) => {
+      throw error;
+    },
   },
 });
 
-const dataMethods = ["post", "put", "patch", "delete"] as const;
+type ApiResponse<T> = { data: T; error: null } | { data: null; error: string };
 
 const apiClient = {
-  get: async <T>(url: string, params?: any) => {
+  get: async <T>(
+    url: string,
+    params?: Record<string, any>,
+  ): Promise<ApiResponse<T>> => {
     try {
-      const result = await axiosClient.get<T>(url, { params });
-      return {
-        data: result.data,
-        error: null,
-      };
+      const data = await alovaInstance.Get<T>(url, { params });
+      return { data, error: null };
     } catch (error) {
       return {
         data: null,
-        error: (error as AxiosError).message || "An error occurred",
+        error: error instanceof Error ? error.message : "An error occurred",
       };
     }
   },
 
-  ...dataMethods.reduce(
-    (acc, method) => {
-      acc[method] = async <T>(url: string, data?: any, config?: any) => {
-        try {
-          const isFormData = data instanceof FormData;
-          const headers = isFormData
-            ? { "Content-Type": "multipart/form-data", ...config?.headers }
-            : config?.headers;
-
-          const result = await axiosClient[method]<T>(url, data, {
-            ...config,
-            headers,
-          });
-          return {
-            data: result.data,
-            error: null,
-          };
-        } catch (error) {
-          return {
-            data: null,
-            error: (error as AxiosError).message || "An error occurred",
-          };
-        }
+  post: async <T>(
+    url: string,
+    body?: any,
+    config?: Record<string, any>,
+  ): Promise<ApiResponse<T>> => {
+    try {
+      const data = await alovaInstance.Post<T>(url, body, config);
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: error instanceof Error ? error.message : "An error occurred",
       };
-      return acc;
-    },
-    {} as Record<
-      "post" | "put" | "patch" | "delete",
-      <T>(
-        url: string,
-        data?: any,
-        config?: any,
-      ) => Promise<{ data: T; error: null } | { data: null; error: string }>
-    >,
-  ),
+    }
+  },
+
+  put: async <T>(
+    url: string,
+    body?: any,
+    config?: Record<string, any>,
+  ): Promise<ApiResponse<T>> => {
+    try {
+      const data = await alovaInstance.Put<T>(url, body, config);
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+
+  patch: async <T>(
+    url: string,
+    body?: any,
+    config?: Record<string, any>,
+  ): Promise<ApiResponse<T>> => {
+    try {
+      const data = await alovaInstance.Patch<T>(url, body, config);
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
+
+  delete: async <T>(
+    url: string,
+    body?: any,
+    config?: Record<string, any>,
+  ): Promise<ApiResponse<T>> => {
+    try {
+      const data = await alovaInstance.Delete<T>(url, body, config);
+      return { data, error: null };
+    } catch (error) {
+      return {
+        data: null,
+        error: error instanceof Error ? error.message : "An error occurred",
+      };
+    }
+  },
 };
 
 export default apiClient;
