@@ -20,6 +20,7 @@
         </router-link>
       </div>
       <div class="flex items-center gap-4">
+        <LanguageSwitcher />
         <template v-if="isAuthenticated">
           <span class="text-foreground text-sm">{{ user?.firstName }}</span>
           <Button variant="outline" size="sm" @click="disconnect"
@@ -44,6 +45,7 @@ import { storeToRefs } from "pinia";
 import { useAuthStore } from "../stores/authStore";
 import apiClient from "../lib/utils/apiClient";
 import { Button } from "@/components/ui/button";
+import LanguageSwitcher from "../components/custom/LanguageSwitcher.vue";
 
 const { user, isAuthenticated } = storeToRefs(useAuthStore());
 
