@@ -4,10 +4,10 @@ import sharedRouter from "./shared";
 import cmsRouter from "./cms";
 import articlesRouter from "./articles";
 import filesRouter from "./shared/files";
-import cacheMiddleware from "../middleware/cache";
+import redisCacheMiddleware from "../middleware/redisCache";
 
 const router = Router();
-router.use(cacheMiddleware);
+router.use(redisCacheMiddleware);
 
 router.get("/", (_, res) => {
   res.json({

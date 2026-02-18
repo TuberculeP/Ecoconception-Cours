@@ -2,10 +2,10 @@ import { Router } from "express";
 import pg from "../../config/db.config";
 import { Article } from "../../config/entities/Article";
 import { Category } from "../../config/entities/Category";
-import cacheMiddleware from "../../middleware/cache";
+import redisCacheMiddleware from "../../middleware/redisCache";
 
 const router = Router();
-router.use(cacheMiddleware);
+router.use(redisCacheMiddleware);
 
 const articleRepo = () => pg.getRepository(Article);
 const categoryRepo = () => pg.getRepository(Category);

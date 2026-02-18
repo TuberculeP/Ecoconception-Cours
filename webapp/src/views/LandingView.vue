@@ -1159,40 +1159,54 @@ async function submitContact() {
 }
 
 async function fetchArticles() {
+  console.log("[LandingView] fetchArticles: start");
   articlesLoading.value = true;
   const result = await apiClient.get<{ data: Article[]; pagination: unknown }>(
     "/articles",
     { limit: 3 },
   );
+  console.log("[LandingView] fetchArticles: result", result);
   if (!result.error && result.data?.data) {
     articles.value = result.data.data;
+  } else {
+    console.error("[LandingView] fetchArticles: error", result.error);
   }
   articlesLoading.value = false;
 }
 
 async function fetchTestimonials() {
+  console.log("[LandingView] fetchTestimonials: start");
   testimonialsLoading.value = true;
   const result = await apiClient.get<{ data: Testimonial[] }>(
     "/cms/testimonials",
     { featured: true, limit: 6 },
   );
+  console.log("[LandingView] fetchTestimonials: result", result);
   if (!result.error && result.data?.data) {
     testimonials.value = result.data.data;
+  } else {
+    console.error("[LandingView] fetchTestimonials: error", result.error);
   }
   testimonialsLoading.value = false;
 }
 
 async function fetchCategories() {
+  console.log("[LandingView] fetchCategories: start");
   categoriesLoading.value = true;
   const result = await apiClient.get<{ data: Category[] }>("/cms/categories");
+  console.log("[LandingView] fetchCategories: result", result);
   if (!result.error && result.data?.data) {
     categories.value = result.data.data;
+  } else {
+    console.error("[LandingView] fetchCategories: error", result.error);
   }
   categoriesLoading.value = false;
 }
 
 async function fetchStatistics() {
+  console.log("[LandingView] fetchStatistics: start");
   const result = await apiClient.get<{ data: Statistic[] }>("/cms/statistics");
+  console.log("[LandingView] fetchStatistics: result", result);
   if (!result.error && result.data?.data) {
     statistics.value = result.data.data;
     const usersStat = statistics.value.find((s) => s.id === "stat-1");
@@ -1203,6 +1217,8 @@ async function fetchStatistics() {
       projects: projectsStat?.value || "50,000+",
       satisfaction: satisfactionStat?.value || "98%",
     };
+  } else {
+    console.error("[LandingView] fetchStatistics: error", result.error);
   }
 }
 
