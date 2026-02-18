@@ -2,6 +2,9 @@ services:
   postgres:
     image: postgres:15
     container_name: postgres
+    labels:
+      - "ecoconception.service=postgres"
+      - "ecoconception.project=ecoconception-cours"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
@@ -23,6 +26,9 @@ services:
   cache:
     image: redis:latest
     container_name: redis_cache
+    labels:
+      - "ecoconception.service=cache"
+      - "ecoconception.project=ecoconception-cours"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -36,6 +42,9 @@ services:
   minio:
     image: minio/minio:latest
     container_name: minio
+    labels:
+      - "ecoconception.service=minio"
+      - "ecoconception.project=ecoconception-cours"
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
@@ -74,6 +83,9 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: express-vue-app
+    labels:
+      - "ecoconception.service=app"
+      - "ecoconception.project=ecoconception-cours"
     environment:
       POSTGRES_URL: postgres://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-mydatabase}
       S3_BUCKET: uploads
@@ -105,6 +117,9 @@ services:
   grafana:
     image: grafana/grafana-enterprise
     container_name: grafana
+    labels:
+      - "ecoconception.service=grafana"
+      - "ecoconception.project=ecoconception-cours"
     environment:
       GF_SERVER_HTTP_PORT: 3001
     volumes:
@@ -116,6 +131,9 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
+    labels:
+      - "ecoconception.service=prometheus"
+      - "ecoconception.project=ecoconception-cours"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
@@ -132,6 +150,9 @@ services:
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
     container_name: cadvisor
+    labels:
+      - "ecoconception.service=cadvisor"
+      - "ecoconception.project=ecoconception-cours"
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
