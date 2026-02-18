@@ -11,3 +11,12 @@ scrape_configs:
     static_configs:
       - targets: ["express-vue-app:3000"]
     metrics_path: /metrics
+
+  - job_name: "cadvisor"
+    static_configs:
+      - targets: ["cadvisor:8080"]
+    metric_relabel_configs:
+      - source_labels: [id]
+        regex: "/docker/([a-f0-9]{12}).*"
+        target_label: container_short_id
+        replacement: "$1"
