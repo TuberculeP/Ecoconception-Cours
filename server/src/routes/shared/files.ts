@@ -2,8 +2,10 @@ import { Router } from "express";
 import path from "path";
 import fs from "fs";
 import { isS3Enabled, getFileFromS3 } from "../../config/storage.config";
+import cacheMiddleware from "../../middleware/cache";
 
 const filesRouter = Router();
+filesRouter.use(cacheMiddleware);
 
 // Proxy pour servir les fichiers (local ou S3)
 filesRouter.get("/:filename", async (req, res) => {

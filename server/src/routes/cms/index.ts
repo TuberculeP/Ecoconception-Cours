@@ -16,8 +16,10 @@ import {
   searchArticles,
   getFeaturedTestimonials,
 } from "../../data/cms.mock";
+import cacheMiddleware from "../../middleware/cache";
 
 const router = Router();
+router.use(cacheMiddleware);
 
 // GET /api/cms/articles - Liste paginée des articles
 router.get("/articles", async (req, res) => {

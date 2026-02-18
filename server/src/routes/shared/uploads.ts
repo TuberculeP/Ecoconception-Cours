@@ -2,8 +2,10 @@ import { Router } from "express";
 import pg from "../../config/db.config";
 import { Upload } from "../../config/entities/Upload";
 import storage, { getFileUrl } from "../../config/storage.config";
+import cacheMiddleware from "../../middleware/cache";
 
 const uploadsRouter = Router();
+uploadsRouter.use(cacheMiddleware);
 
 uploadsRouter.post("/", storage.single("file"), async (req, res) => {
   if (!req.isAuthenticated() || !req.user) {

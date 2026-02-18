@@ -4,8 +4,10 @@ import sharedRouter from "./shared";
 import cmsRouter from "./cms";
 import articlesRouter from "./articles";
 import filesRouter from "./shared/files";
+import cacheMiddleware from "../middleware/cache";
 
 const router = Router();
+router.use(cacheMiddleware);
 
 router.get("/", (_, res) => {
   res.json({

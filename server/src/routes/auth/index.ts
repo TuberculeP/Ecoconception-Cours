@@ -4,8 +4,10 @@ import pg from "../../config/db.config";
 import bcrypt from "bcrypt";
 import passport from "passport";
 import { isGoogleAuthEnabled } from "../../config/passport.config";
+import cacheMiddleware from "../../middleware/cache";
 
 const authRouter = Router();
+authRouter.use(cacheMiddleware);
 
 // Config endpoint - returns auth configuration for the frontend
 authRouter.get("/config", (_req, res) => {
