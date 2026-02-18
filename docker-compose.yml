@@ -17,6 +17,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   cache:
     image: redis:latest
@@ -28,6 +30,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   minio:
     image: minio/minio:latest
@@ -43,6 +47,8 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    networks:
+      - app-network
 
   minio-init:
     image: minio/mc:latest
@@ -60,6 +66,8 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-minioadmin}
+    networks:
+      - app-network
 
   app:
     build:
@@ -91,6 +99,8 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    networks:
+      - app-network
 
   grafana:
     image: grafana/grafana-enterprise
@@ -100,6 +110,8 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
     restart: unless-stopped
+    networks:
+      - app-network
 
   prometheus:
     image: prom/prometheus:latest
@@ -114,6 +126,8 @@ services:
       - "--web.console.templates=/usr/share/prometheus/consoles"
       - "--web.enable-lifecycle"
     restart: unless-stopped
+    networks:
+      - app-network
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:latest
@@ -124,6 +138,12 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   postgres_data:
