@@ -54,11 +54,17 @@
               src="https://picsum.photos/seed/hero-main/600/400"
               alt="Main dashboard preview with charts and stats"
               class="rounded-xl shadow-2xl w-full"
+              fetchpriority="high"
+              width="600"
+              height="400"
             />
             <img
               src="https://picsum.photos/seed/hero-feature/300/200"
               alt="Highlighted feature preview with analytics graph"
               class="absolute -bottom-8 -left-8 rounded-lg shadow-xl hidden lg:block"
+              fetchpriority="high"
+              width="300"
+              height="200"
             />
           </div>
         </div>
@@ -81,6 +87,9 @@
             :src="`https://picsum.photos/seed/logo-${i}/120/40?grayscale`"
             :alt="`Logo of trusted partner number ${i}`"
             class="h-8 opacity-60 hover:opacity-100 transition-opacity"
+            fetchpriority="high"
+            width="120"
+            height="40"
           />
         </div>
       </div>
@@ -148,6 +157,9 @@
               :src="`https://picsum.photos/seed/gallery-${i}/400/400`"
               :alt="`Screenshot of project number ${i}`"
               class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+              fetchpriority="high"
+              width="400"
+              height="400"
             />
             <div
               class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
@@ -206,6 +218,9 @@
                   :src="testimonial.avatar"
                   :alt="testimonial.name"
                   class="w-12 h-12 rounded-full"
+                  fetchpriority="high"
+                  width="48"
+                  height="48"
                 />
                 <div>
                   <p class="font-semibold">{{ testimonial.name }}</p>
@@ -327,6 +342,7 @@
                 :src="article.coverImage"
                 :alt="article.title"
                 class="w-full h-full object-cover"
+                fetchpriority="high"
               />
             </div>
             <div
@@ -511,6 +527,8 @@
               src="https://picsum.photos/seed/office/500/300"
               alt="Office"
               class="mt-8 rounded-lg shadow-lg w-full"
+              width="500"
+              height="300"
             />
           </div>
           <Card>
