@@ -88,8 +88,6 @@
             :alt="`Logo of trusted partner number ${i}`"
             class="h-8 opacity-60 hover:opacity-100 transition-opacity"
             fetchpriority="high"
-            width="120"
-            height="40"
           />
         </div>
       </div>
