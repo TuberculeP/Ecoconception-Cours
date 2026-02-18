@@ -16,10 +16,17 @@ import {
   searchArticles,
   getFeaturedTestimonials,
 } from "../../data/cms.mock";
-import redisCacheMiddleware from "../../middleware/redisCache";
+
+import buildRedisCacheMiddleware from "../../middleware/redisCache";
+import buildCacheMiddleware from "../../middleware/cache";
+
+const isProd = process.env.NODE_ENV === "production";
+const selectedCache = isProd
+  ? buildRedisCacheMiddleware()
+  : buildCacheMiddleware();
 
 const router = Router();
-router.use(redisCacheMiddleware);
+router.use(selectedCache);
 
 // GET /api/cms/articles - Liste paginée des articles
 router.get("/articles", async (req, res) => {
