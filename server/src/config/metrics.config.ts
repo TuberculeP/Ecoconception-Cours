@@ -28,7 +28,7 @@ const EXCLUDED_PATHS = ["/metrics", "/health"];
 export const metricsMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (EXCLUDED_PATHS.includes(req.path)) {
     return next();
@@ -42,7 +42,7 @@ export const metricsMiddleware = (
 
     httpRequestDuration.observe(
       { method: req.method, route, status_code: res.statusCode },
-      duration
+      duration,
     );
     httpRequestsTotal.inc({
       method: req.method,
