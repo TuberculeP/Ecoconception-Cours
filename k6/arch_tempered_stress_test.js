@@ -6,7 +6,7 @@ import { Rate } from "k6/metrics";
 // ATTENTION : surveiller les métriques Grafana pendant ce test !
 export const options = {
   stages: [
-    { duration: "1m", target: 50 }, // Montée rapide à 50 VUs
+    { duration: "1m", target: 50000000 }, // Montée rapide à 50 VUs
   ],
   thresholds: {
     http_req_failed: ["rate<0.5"], // On accepte jusqu'à 50% d'erreurs en stress
