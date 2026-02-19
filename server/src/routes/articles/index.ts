@@ -3,7 +3,16 @@ import pg from "../../config/db.config";
 import { Article } from "../../config/entities/Article";
 import { Category } from "../../config/entities/Category";
 
+import buildRedisCacheMiddleware from "../../middleware/redisCache";
+import buildCacheMiddleware from "../../middleware/cache";
+
+const isProd = process.env.NODE_ENV === "production";
+const selectedCache = isProd
+  ? buildRedisCacheMiddleware()
+  : buildCacheMiddleware();
+
 const router = Router();
+router.use(selectedCache);
 
 const articleRepo = () => pg.getRepository(Article);
 const categoryRepo = () => pg.getRepository(Category);
@@ -39,6 +48,7 @@ function enrichArticleWithCover<T extends { content: string }>(
 
 // GET /api/articles - Liste des articles publiés (public)
 router.get("/", async (req, res) => {
+  console.log("Fetching articles with query:", req.query);
   const page = parseInt(req.query.page as string) || 1;
   const limit = Math.min(parseInt(req.query.limit as string) || 10, 50);
   const offset = (page - 1) * limit;
