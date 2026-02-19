@@ -1,5 +1,6 @@
 import "./config/sentry.config";
 import Sentry from "@sentry/node";
+import "./config/pyroscope.config";
 import "dotenv/config";
 import pg from "./config/db.config";
 import path from "path";
@@ -12,6 +13,7 @@ import initializePassport from "./config/passport.config";
 import { Article } from "./config/entities/Article";
 
 import customSession from "./config/cache.config";
+import { metricsMiddleware, metricsHandler } from "./config/metrics.config";
 
 const main = async () => {
   const dev = process.env.NODE_ENV !== "production";
@@ -19,6 +21,7 @@ const main = async () => {
   initializePassport();
 
   const app = express();
+  app.use(metricsMiddleware);
   app.use(express.json());
   app.use(customSession());
   app.use(cookieParser());
@@ -28,6 +31,8 @@ const main = async () => {
   app.get("/health", (_, res) => {
     res.sendStatus(200);
   });
+
+  app.get("/metrics", metricsHandler);
 
   app.use("/api", router);
 

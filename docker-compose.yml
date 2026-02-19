@@ -2,6 +2,9 @@ services:
   postgres:
     image: postgres:15
     container_name: postgres
+    labels:
+      - "ecoconception.service=postgres"
+      - "ecoconception.project=ecoconception-cours"
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
@@ -9,14 +12,23 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-user}"]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U ${POSTGRES_USER:-user} -d ${POSTGRES_DB:-mydatabase}",
+        ]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   cache:
     image: redis:latest
     container_name: redis_cache
+    labels:
+      - "ecoconception.service=cache"
+      - "ecoconception.project=ecoconception-cours"
     volumes:
       - redis_data:/data
     healthcheck:
@@ -24,14 +36,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - app-network
 
   minio:
     image: minio/minio:latest
     container_name: minio
+    labels:
+      - "ecoconception.service=minio"
+      - "ecoconception.project=ecoconception-cours"
     command: server /data --console-address ":9001"
-    ports:
-      - "9000:9000"
-      - "9001:9001"
     environment:
       MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-minioadmin}
@@ -42,6 +56,8 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
+    networks:
+      - app-network
 
   minio-init:
     image: minio/mc:latest
@@ -59,12 +75,17 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_USER:-minioadmin}
       MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-minioadmin}
+    networks:
+      - app-network
 
   app:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: express-vue-app
+    labels:
+      - "ecoconception.service=app"
+      - "ecoconception.project=ecoconception-cours"
     environment:
       POSTGRES_URL: postgres://${POSTGRES_USER:-user}:${POSTGRES_PASSWORD:-password}@postgres:5432/${POSTGRES_DB:-mydatabase}
       S3_BUCKET: uploads
@@ -72,6 +93,7 @@ services:
       S3_ACCESS_KEY_ID: ${MINIO_USER:-minioadmin}
       S3_SECRET_ACCESS_KEY: ${MINIO_PASSWORD:-minioadmin}
       S3_ENDPOINT: http://minio:9000
+      PYROSCOPE_SERVER: http://pyroscope:4040
     depends_on:
       postgres:
         condition: service_healthy
@@ -80,12 +102,87 @@ services:
       minio:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "node", "-e", "fetch('http://localhost:3000/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))"]
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://localhost:3000/health').then(r => r.ok ? process.exit(0) : process.exit(1)).catch(() => process.exit(1))",
+        ]
       interval: 30s
       timeout: 5s
       retries: 3
+    networks:
+      - app-network
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    labels:
+      - "ecoconception.service=grafana"
+      - "ecoconception.project=ecoconception-cours"
+    environment:
+      GF_SERVER_HTTP_PORT: 3001
+    volumes:
+      - grafana_data:/var/lib/grafana
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    labels:
+      - "ecoconception.service=prometheus"
+      - "ecoconception.project=ecoconception-cours"
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-lifecycle"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    labels:
+      - "ecoconception.service=cadvisor"
+      - "ecoconception.project=ecoconception-cours"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  pyroscope:
+    image: grafana/pyroscope:latest
+    container_name: pyroscope
+    labels:
+      - "ecoconception.service=pyroscope"
+      - "ecoconception.project=ecoconception-cours"
+    volumes:
+      - pyroscope_data:/var/lib/pyroscope
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   postgres_data:
   redis_data:
   minio_data:
+  prometheus_data:
+  grafana_data:
+  pyroscope_data:
