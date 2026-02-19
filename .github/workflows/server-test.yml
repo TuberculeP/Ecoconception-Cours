@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-node@v4
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci --include=optional
 
       - name: Run tests
         run: npx jest --coverage
