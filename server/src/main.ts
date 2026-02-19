@@ -1,4 +1,6 @@
 import "./config/pyroscope.config";
+import "./config/sentry.config";
+import Sentry from "@sentry/node";
 import "dotenv/config";
 import pg from "./config/db.config";
 import path from "path";
@@ -109,6 +111,7 @@ ${articles
     }
   });
 
+  Sentry.setupExpressErrorHandler(app);
   app.listen(3000, () => {
     console.log("> Ready on http://localhost:3000");
   });
