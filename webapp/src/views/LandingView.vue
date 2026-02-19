@@ -50,22 +50,46 @@
             </div>
           </div>
           <div class="relative">
-            <img
-              src="https://picsum.photos/seed/hero-main/600/400"
-              alt="Main dashboard preview with charts and stats"
-              class="rounded-xl shadow-2xl w-full"
-              fetchpriority="high"
-              width="600"
-              height="400"
-            />
-            <img
-              src="https://picsum.photos/seed/hero-feature/300/200"
-              alt="Highlighted feature preview with analytics graph"
-              class="absolute -bottom-8 -left-8 rounded-lg shadow-xl hidden lg:block"
-              fetchpriority="high"
-              width="300"
-              height="200"
-            />
+            <picture>
+              <source
+                srcset="https://picsum.photos/seed/hero-main/600/400.webp"
+                type="image/webp"
+              />
+              <source
+                srcset="https://picsum.photos/seed/hero-main/600/400.avif"
+                type="image/avif"
+              />
+              <img
+                src="https://picsum.photos/seed/hero-main/600/400"
+                alt="Main dashboard preview with charts and stats"
+                class="rounded-xl shadow-2xl w-full"
+                fetchpriority="high"
+                width="600"
+                height="400"
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
+            <picture>
+              <source
+                srcset="https://picsum.photos/seed/hero-feature/300/200.webp"
+                type="image/webp"
+              />
+              <source
+                srcset="https://picsum.photos/seed/hero-feature/300/200.avif"
+                type="image/avif"
+              />
+              <img
+                src="https://picsum.photos/seed/hero-feature/300/200"
+                alt="Highlighted feature preview with analytics graph"
+                class="absolute -bottom-8 -left-8 rounded-lg shadow-xl hidden lg:block"
+                fetchpriority="high"
+                width="300"
+                height="200"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
           </div>
         </div>
       </div>
@@ -81,14 +105,26 @@
           {{ t("logos.trust") }}
         </p>
         <div class="flex flex-wrap justify-center items-center gap-8 lg:gap-16">
-          <img
-            v-for="i in 6"
-            :key="i"
-            :src="`https://picsum.photos/seed/logo-${i}/120/40?grayscale`"
-            :alt="`Logo of trusted partner number ${i}`"
-            class="h-8 opacity-60 hover:opacity-100 transition-opacity"
-            fetchpriority="high"
-          />
+          <picture v-for="i in 6" :key="i">
+            <source
+              :srcset="`https://picsum.photos/seed/logo-${i}/120/40.webp?grayscale`"
+              type="image/webp"
+            />
+            <source
+              :srcset="`https://picsum.photos/seed/logo-${i}/120/40.avif?grayscale`"
+              type="image/avif"
+            />
+            <img
+              :src="`https://picsum.photos/seed/logo-${i}/120/40?grayscale`"
+              :alt="`Logo of trusted partner number ${i}`"
+              class="h-8 opacity-60 hover:opacity-100 transition-opacity"
+              fetchpriority="high"
+              width="120"
+              height="40"
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
         </div>
       </div>
     </section>
@@ -151,14 +187,26 @@
             :key="i"
             class="relative group overflow-hidden rounded-lg aspect-square"
           >
-            <img
-              :src="`https://picsum.photos/seed/gallery-${i}/400/400`"
-              :alt="`Screenshot of project number ${i}`"
-              class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              fetchpriority="high"
-              width="400"
-              height="400"
-            />
+            <picture>
+              <source
+                :srcset="`https://picsum.photos/seed/gallery-${i}/400/400.webp`"
+                type="image/webp"
+              />
+              <source
+                :srcset="`https://picsum.photos/seed/gallery-${i}/400/400.avif`"
+                type="image/avif"
+              />
+              <img
+                :src="`https://picsum.photos/seed/gallery-${i}/400/400`"
+                :alt="`Screenshot of project number ${i}`"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                fetchpriority="high"
+                width="400"
+                height="400"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <div
               class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
             >
@@ -212,14 +260,30 @@
           >
             <CardContent class="pt-6">
               <div class="flex items-center gap-4 mb-4">
-                <img
-                  :src="testimonial.avatar"
-                  :alt="testimonial.name"
-                  class="w-12 h-12 rounded-full"
-                  fetchpriority="high"
-                  width="48"
-                  height="48"
-                />
+                <picture>
+                  <source
+                    :srcset="
+                      testimonial.avatar.replace(/\.(jpg|jpeg|png)$/, '.webp')
+                    "
+                    type="image/webp"
+                  />
+                  <source
+                    :srcset="
+                      testimonial.avatar.replace(/\.(jpg|jpeg|png)$/, '.avif')
+                    "
+                    type="image/avif"
+                  />
+                  <img
+                    :src="testimonial.avatar"
+                    :alt="testimonial.name"
+                    class="w-12 h-12 rounded-full"
+                    fetchpriority="high"
+                    width="48"
+                    height="48"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </picture>
                 <div>
                   <p class="font-semibold">{{ testimonial.name }}</p>
                   <p class="text-sm text-muted-foreground">
@@ -1095,40 +1159,54 @@ async function submitContact() {
 }
 
 async function fetchArticles() {
+  console.log("[LandingView] fetchArticles: start");
   articlesLoading.value = true;
   const result = await apiClient.get<{ data: Article[]; pagination: unknown }>(
     "/articles",
     { limit: 3 },
   );
+  console.log("[LandingView] fetchArticles: result", result);
   if (!result.error && result.data?.data) {
     articles.value = result.data.data;
+  } else {
+    console.error("[LandingView] fetchArticles: error", result.error);
   }
   articlesLoading.value = false;
 }
 
 async function fetchTestimonials() {
+  console.log("[LandingView] fetchTestimonials: start");
   testimonialsLoading.value = true;
   const result = await apiClient.get<{ data: Testimonial[] }>(
     "/cms/testimonials",
     { featured: true, limit: 6 },
   );
+  console.log("[LandingView] fetchTestimonials: result", result);
   if (!result.error && result.data?.data) {
     testimonials.value = result.data.data;
+  } else {
+    console.error("[LandingView] fetchTestimonials: error", result.error);
   }
   testimonialsLoading.value = false;
 }
 
 async function fetchCategories() {
+  console.log("[LandingView] fetchCategories: start");
   categoriesLoading.value = true;
   const result = await apiClient.get<{ data: Category[] }>("/cms/categories");
+  console.log("[LandingView] fetchCategories: result", result);
   if (!result.error && result.data?.data) {
     categories.value = result.data.data;
+  } else {
+    console.error("[LandingView] fetchCategories: error", result.error);
   }
   categoriesLoading.value = false;
 }
 
 async function fetchStatistics() {
+  console.log("[LandingView] fetchStatistics: start");
   const result = await apiClient.get<{ data: Statistic[] }>("/cms/statistics");
+  console.log("[LandingView] fetchStatistics: result", result);
   if (!result.error && result.data?.data) {
     statistics.value = result.data.data;
     const usersStat = statistics.value.find((s) => s.id === "stat-1");
@@ -1139,6 +1217,8 @@ async function fetchStatistics() {
       projects: projectsStat?.value || "50,000+",
       satisfaction: satisfactionStat?.value || "98%",
     };
+  } else {
+    console.error("[LandingView] fetchStatistics: error", result.error);
   }
 }
 
