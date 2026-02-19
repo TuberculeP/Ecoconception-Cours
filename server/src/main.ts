@@ -1,4 +1,6 @@
+import "../instrument";
 import "dotenv/config";
+import Sentry from "@sentry/node";
 import pg from "./config/db.config";
 import path from "path";
 import express from "express";
@@ -104,6 +106,7 @@ ${articles
     }
   });
 
+  Sentry.setupExpressErrorHandler(app);
   app.listen(3000, () => {
     console.log("> Ready on http://localhost:3000");
   });
