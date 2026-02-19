@@ -1,3 +1,4 @@
+import "./config/pyroscope.config";
 import "dotenv/config";
 import pg from "./config/db.config";
 import path from "path";
