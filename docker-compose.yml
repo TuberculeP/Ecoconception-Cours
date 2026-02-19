@@ -93,6 +93,7 @@ services:
       S3_ACCESS_KEY_ID: ${MINIO_USER:-minioadmin}
       S3_SECRET_ACCESS_KEY: ${MINIO_PASSWORD:-minioadmin}
       S3_ENDPOINT: http://minio:9000
+      PYROSCOPE_SERVER: http://pyroscope:4040
     depends_on:
       postgres:
         condition: service_healthy
@@ -162,6 +163,18 @@ services:
     networks:
       - app-network
 
+  pyroscope:
+    image: grafana/pyroscope:latest
+    container_name: pyroscope
+    labels:
+      - "ecoconception.service=pyroscope"
+      - "ecoconception.project=ecoconception-cours"
+    volumes:
+      - pyroscope_data:/var/lib/pyroscope
+    restart: unless-stopped
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge
@@ -172,3 +185,4 @@ volumes:
   minio_data:
   prometheus_data:
   grafana_data:
+  pyroscope_data:

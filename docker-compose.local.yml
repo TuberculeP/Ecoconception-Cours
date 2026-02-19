@@ -12,3 +12,6 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
+  pyroscope:
+    ports:
+      - "4040:4040"

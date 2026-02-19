@@ -15,6 +15,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.990.0",
     "@sentry/node": "^10.39.0",
+    "@pyroscope/nodejs": "^0.4.10",
     "@types/multer": "^2.0.0",
     "alova": "^3.5.0",
     "bcrypt": "^6.0.0",

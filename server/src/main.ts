@@ -1,3 +1,4 @@
+import "./config/pyroscope.config";
 import "dotenv/config";
 import "./config/sentry.config";
 import Sentry from "@sentry/node";
