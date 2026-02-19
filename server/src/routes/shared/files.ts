@@ -3,16 +3,7 @@ import path from "path";
 import fs from "fs";
 import { isS3Enabled, getFileFromS3 } from "../../config/storage.config";
 
-import buildRedisCacheMiddleware from "../../middleware/redisCache";
-import buildCacheMiddleware from "../../middleware/cache";
-
-const isProd = process.env.NODE_ENV === "production";
-const selectedCache = isProd
-  ? buildRedisCacheMiddleware()
-  : buildCacheMiddleware();
-
 const filesRouter = Router();
-filesRouter.use(selectedCache);
 
 // Proxy pour servir les fichiers (local ou S3)
 filesRouter.get("/:filename", async (req, res) => {

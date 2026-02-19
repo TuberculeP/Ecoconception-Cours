@@ -3,16 +3,7 @@ import pg from "../../config/db.config";
 import { Upload } from "../../config/entities/Upload";
 import storage, { getFileUrl } from "../../config/storage.config";
 
-import buildRedisCacheMiddleware from "../../middleware/redisCache";
-import buildCacheMiddleware from "../../middleware/cache";
-
-const isProd = process.env.NODE_ENV === "production";
-const selectedCache = isProd
-  ? buildRedisCacheMiddleware()
-  : buildCacheMiddleware();
-
 const uploadsRouter = Router();
-uploadsRouter.use(selectedCache);
 
 uploadsRouter.post("/", storage.single("file"), async (req, res) => {
   if (!req.isAuthenticated() || !req.user) {

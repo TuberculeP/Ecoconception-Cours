@@ -5,16 +5,7 @@ import bcrypt from "bcrypt";
 import passport from "passport";
 import { isGoogleAuthEnabled } from "../../config/passport.config";
 
-import buildRedisCacheMiddleware from "../../middleware/redisCache";
-import buildCacheMiddleware from "../../middleware/cache";
-
-const isProd = process.env.NODE_ENV === "production";
-const selectedCache = isProd
-  ? buildRedisCacheMiddleware()
-  : buildCacheMiddleware();
-
 const authRouter = Router();
-authRouter.use(selectedCache);
 
 // Config endpoint - returns auth configuration for the frontend
 authRouter.get("/config", (_req, res) => {

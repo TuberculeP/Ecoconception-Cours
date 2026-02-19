@@ -5,16 +5,7 @@ import cmsRouter from "./cms";
 import articlesRouter from "./articles";
 import filesRouter from "./shared/files";
 
-import buildRedisCacheMiddleware from "../middleware/redisCache";
-import buildCacheMiddleware from "../middleware/cache";
-
-const isProd = process.env.NODE_ENV === "production";
-const selectedCache = isProd
-  ? buildRedisCacheMiddleware()
-  : buildCacheMiddleware();
-
 const router = Router();
-router.use(selectedCache);
 
 router.get("/", (_, res) => {
   res.json({
