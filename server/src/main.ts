@@ -1,5 +1,5 @@
-import "../instrument";
 import "dotenv/config";
+import "./config/sentry.config";
 import Sentry from "@sentry/node";
 import pg from "./config/db.config";
 import path from "path";
